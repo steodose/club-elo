@@ -1,0 +1,382 @@
+---
+title: "Big 5 Leagues"
+runtime: shiny
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: rows
+    vertical_layout: scroll
+    theme: cosmo
+    social: [ "twitter", "linkedin", "menu" ]
+---
+
+<style>                     
+.navbar {
+  background-color:black;
+  border-color:white;
+}
+.navbar-brand {
+color:white!important;
+}
+</style>   
+
+<style type="text/css">
+
+.chart-title {  /* chart_title  */
+   font-size: 15px
+
+</style>
+
+
+```{r global, include = FALSE}
+library(flexdashboard)
+library(shiny)
+library(reactable)
+library(reactablefmtr)
+library(worldfootballR)
+library(tidyverse)
+library(rvest)
+library(teamcolors) # NFL team colors and logos
+library(extrafont)
+library(gt)
+library(gtExtras)
+library(ggimage)
+library(animation)
+library(DBI)
+library(RSQLite)
+library(glue)
+library(ggtext)
+library(scales)
+
+
+## Setup steps
+
+team_mapping <- read_csv("https://raw.githubusercontent.com/steodose/Club-Soccer-Forecasts/main/team_mapping.csv")
+
+# fix Nottingham Forest in 538 team mapping data
+team_mapping2 <- team_mapping %>%
+    mutate(team_538 = case_when(
+        team == "Nott'm Forest" ~ "Nottingham Forest",
+        TRUE ~ team_538
+    ))
+
+# Optional but makes R prefer not to display numbers in scientific notation
+options(scipen = 9999)
+
+# Custom ggplot theme (inspired by Owen Phillips at the F5 substack blog)
+theme_custom <- function () { 
+  theme_minimal(base_size=11, base_family="Chivo") %+rbundace% 
+    theme(
+      panel.grid.minor = element_blank(),
+      plot.background = element_rect(fill = 'transparent', color = "transparent")
+    )
+}
+
+# Define 538 table theme for Reactable table(s) below
+theme_538 <- function() {
+    reactable::reactableTheme(
+        searchInputStyle = list(width = "31%", backgroundColor = "#F9F9F9"),
+        style = list(
+            fontFamily = "Chivo"
+        ),
+        headerStyle = list(
+            "&:hover[aria-sort]" = list(
+                background = "hsl(0, 0%, 80%)"),
+            "&[aria-sort='ascending'], &[aria-sort='descending']" = list(
+                background = "#555",
+                color = "#FFF"
+            ),
+            borderColor = "#333"
+        ),
+        borderColor = "#CDCDCD"
+    )
+}
+
+
+##### Custom gt table themes for graphics. Inspired by Tom Mock's excellent blog posts #####
+gt_theme_538 <- function(data,...) {
+    data %>%
+        # Add team logos w/ web_image
+        text_transform(
+            locations = cells_body(
+                columns = flag_logo
+            ),
+            fn = function(x) {
+                web_image(
+                    url = x,
+                    height = 25
+                )
+            }
+        ) %>%
+        # Relabel columns
+        cols_label(
+            flag_logo = ""
+        ) %>%
+        opt_all_caps()  %>%
+        opt_table_font(
+            font = list(
+                google_font("Chivo"),
+                default_fonts()
+            )
+        ) %>%
+        tab_style(
+            style = cell_borders(
+                sides = "bottom", color = "transparent", weight = px(2)
+            ),
+            locations = cells_body(
+                columns = TRUE,
+                # This is a relatively sneaky way of changing the bottom border
+                # Regardless of data size
+                rows = nrow(data$`_data`)
+            )
+        )  %>% 
+        tab_options(
+            column_labels.background.color = "white",
+            table.border.top.width = px(3),
+            table.border.top.color = "transparent",
+            table.border.bottom.color = "transparent",
+            table.border.bottom.width = px(3),
+            column_labels.border.top.width = px(3),
+            column_labels.border.top.color = "transparent",
+            column_labels.border.bottom.width = px(3),
+            column_labels.border.bottom.color = "black",
+            data_row.padding = px(3),
+            source_notes.font.size = 12,
+            table.font.size = 16,
+            heading.align = "left",
+            ...
+        ) 
+}
+
+
+## Load data
+
+matches <- read_csv("https://projects.fivethirtyeight.com/soccer-api/club/spi_matches_latest.csv") %>%
+  filter(league == 'Barclays Premier League' | league == 'German Bundesliga' | league == 'Spanish Primera Division' |  league == 'French Ligue 1' | league == 'Italy Serie A',
+           season == 2022)
+
+
+
+```
+
+Inputs {.sidebar}
+-----------------------------------------------------------------------
+
+``` {r}
+
+ selectInput("leagueInput", label = h3("Select League"), 
+    choices = unique(matches$league),
+    selected="Barclays Premier League", multiple = FALSE)
+
+```
+
+
+Row
+-----------------------------------------------------------------------
+
+### Country {.value-box data-width=50}
+
+```{r}
+
+# make dataframe with country names
+country_leagues <- data.frame(country = c("England", "Germany", "Spain", "France", "Italy"),
+                        league = c("Barclays Premier League", "German Bundesliga", "Spanish Primera Division", "French Ligue 1", "Italy Serie A")
+)
+
+country<- reactive({
+  country_leagues %>% 
+  filter(league == input$leagueInput) %>% 
+  pull(country)
+})
+
+
+# Put valueBox() inside renderValueBox({})
+renderValueBox({
+  valueBox(value = country(), 
+           caption = "Country",
+           color = "#013369",
+           icon = "fa-globe")
+})
+
+```
+
+
+### Data Updated {.value-box data-width=50}
+
+```{r}
+
+update_date <- reactive({
+  matches %>% 
+  filter(league == input$leagueInput) %>% 
+    na.omit() %>%
+  summarise(latest_match = max(date))
+})
+
+
+# Put valueBox() inside renderValueBox({})
+renderValueBox({
+  valueBox(value = update_date(), 
+           caption = "Matches Last Updated",
+           color = "#013369",
+           icon = "fa-calendar")
+})
+
+```
+
+Row {.tabset data-height=650}
+-----------------------------------------------------------------------
+
+### League Table
+    
+```{r}
+
+epl_matches <- reactive({
+  matches %>%
+  filter(league == input$leagueInput) %>%
+  mutate(result = score1 - score2,
+           xresult = xg1 - xg2) %>%
+    select(team1, team2, result, xresult, score1, score2, xg1, xg2) %>%
+    pivot_longer(team1:team2, names_to = "home_away", values_to = "team") %>%
+    mutate(
+        result = ifelse(home_away == "team1", result, -result),
+        xresult = ifelse(home_away == "team1", xresult, -xresult),
+        win = ifelse(result == 0, 0.5, ifelse(result > 0, 1, 0))
+    ) %>%
+    select(team, score1, score2, xg1, xg2, win, result, xresult) %>%
+    drop_na() %>%
+    group_by(team) %>%
+    summarise(
+        Wins = length(win[win == 1]),
+        Losses = length(win[win == 0]),
+        Draws = length(win[win == 0.5]),
+        MP = sum(Wins, Losses, Draws),
+        Points = (Wins * 3) + (Draws * 1),
+        win_perc = (100 * Points / (MP * 3)),
+        GD = sum(result),
+        xGD = sum(xresult),
+        form = list(win), .groups = "drop"
+    ) %>%
+    left_join(team_mapping2, by = c("team" = "team_538")) %>%
+    select(url_logo_espn, team, Points, MP, Wins, Draws, Losses, GD, xGD, win_perc, form) %>%
+    arrange(desc(Points), desc(GD)) %>%
+    ungroup() %>%
+    mutate(Rank = row_number()) %>%
+    relocate(Rank) %>%
+    rename(Team = team) %>%
+    mutate(list_data = list(c(Wins, Draws, Losses))) %>%
+    gather(attr_num, list_data, c(Wins, Draws, Losses)) %>%
+    group_by_at(vars(-attr_num, -list_data)) %>%
+    summarise(list_data = list(list_data)) %>%
+    ungroup()
+})
+
+
+
+# Make current standings table using gt package
+render_gt({
+epl_matches() %>%
+    gt() %>%
+    # Relabel columns
+    cols_label(
+        url_logo_espn = "",
+        win_perc = "Win %",
+        form = "Form"
+    ) %>%
+    text_transform(
+        locations = cells_body(vars(url_logo_espn)),
+        fn = function(x) {
+            web_image(url = x,
+                      height = px(30))
+        }
+    ) %>%
+    data_color(columns = 4,
+               colors = scales::col_numeric(
+                   palette = c("white", "#3fc1c9"),
+                   domain = NULL)
+    ) %>%
+    #gt_theme_538() %>%
+    tab_style(
+        style = cell_borders(sides = "bottom", color = "black", weight = px(1)),
+        locations = cells_body(rows = 4)
+    ) %>%
+    tab_style(
+        style = cell_borders(sides = "bottom", color = "black", weight = px(1)),
+        locations = cells_body(rows = 17)
+    ) %>%
+    tab_style(
+        style = list(
+            cell_text(color = "red")
+        ),
+        locations = cells_body(
+            columns = vars(GD),
+            rows = GD <= 0
+        )
+    ) %>%
+    tab_style(
+        style = list(
+            cell_text(color = "blue")
+        ),
+        locations = cells_body(
+            columns = vars(GD),
+            rows = GD > 0
+        )
+    ) %>%
+    tab_style(
+        style = list(
+            cell_text(color = "red")
+        ),
+        locations = cells_body(
+            columns = vars(xGD),
+            rows = xGD <= 0
+        )
+    ) %>%
+    tab_style(
+        style = list(
+            cell_text(color = "blue")
+        ),
+        locations = cells_body(
+            columns = vars(xGD),
+            rows = xGD > 0
+        )
+    ) %>%
+    fmt_number(
+        columns = vars(xGD),
+        decimals = 1
+    ) %>%
+    cols_align(align = "left",
+               columns = 1) %>%
+    tab_options(column_labels.font.weight = "bold") %>%
+    tab_header(title = md("**2022-23 League Table**"),
+               subtitle = glue("Thru matches played as of date mentioned above.")) %>%
+    tab_source_note(
+        source_note = md("DATA: fivethirtyeight.com")) %>%
+    gt_plt_bar_pct(column = win_perc, scaled = TRUE, fill = "navy", background = "gray") %>%
+    gt_plt_winloss(form, max_wins = 30) %>%
+    gt_plt_bar_stack(list_data, width = 60,
+                     labels = c("  WINS  ", "  DRAWS  ", "  LOSSES  "),
+                     palette= c("#ff4343", "#bfbfbf", "#0a1c2b")) %>%
+    tab_footnote(
+        footnote = "Share of total available points captured. Win = 3 points, Draw = 1 point, Loss = 0 points.",
+        locations = cells_column_labels(vars(win_perc))
+    ) %>%
+    tab_footnote(
+        footnote = "Expected Goals (xG) is the probability a shot will result in a goal based on the characteristics of that shot. Measures  quality of chances created.",
+        locations = cells_column_labels(vars(xGD))
+    )
+
+})
+
+```
+
+
+
+```{css}
+    .chart-shim {
+      overflow: auto;
+    }
+```
+
+### About
+
+**Big 5 European Leagues App**
+
+This dashboard looks at the current tables and statistics for the Big 5 European leagues. All data is sourced from FiveThirtyEight.com unless noted otherwise. App created using R Shiny by [Stephan Teodosescu](https://stephanteodosescu.com).
