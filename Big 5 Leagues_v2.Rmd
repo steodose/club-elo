@@ -46,6 +46,7 @@ library(RSQLite)
 library(glue)
 library(ggtext)
 library(scales)
+library(svglite)
 
 
 ## Setup steps

@@ -5,9 +5,9 @@ account: steodosescu
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 8225452
-bundleId: 6811004
+bundleId: 6811037
 url: https://steodosescu.shinyapps.io/Big-5-Leagues/
-when: 1675563888.77923
-lastSyncTime: 1675563888.77925
+when: 1675565306.21145
+lastSyncTime: 1675565306.21146
 asMultiple: FALSE
 asStatic: FALSE
