@@ -32,17 +32,14 @@ library(flexdashboard)
 library(shiny)
 library(reactable)
 library(reactablefmtr)
+library(htmltools)
 library(worldfootballR)
 library(tidyverse)
 library(rvest)
-library(teamcolors) # NFL team colors and logos
 library(extrafont)
 library(gt)
 library(gtExtras)
-library(ggimage)
-library(animation)
-library(DBI)
-library(RSQLite)
+library(ggimage) 
 library(glue)
 library(ggtext)
 library(scales)
@@ -50,15 +47,6 @@ library(svglite)
 
 
 ## Setup steps
-
-team_mapping <- read_csv("https://raw.githubusercontent.com/steodose/Club-Soccer-Forecasts/main/team_mapping.csv")
-
-# fix Nottingham Forest in 538 team mapping data
-team_mapping2 <- team_mapping %>%
-    mutate(team_538 = case_when(
-        team == "Nott'm Forest" ~ "Nottingham Forest",
-        TRUE ~ team_538
-    ))
 
 # Optional but makes R prefer not to display numbers in scientific notation
 options(scipen = 9999)
@@ -148,14 +136,103 @@ gt_theme_538 <- function(data,...) {
         ) 
 }
 
+```
+
+
+``` {r}
 
 ## Load data
+team_mapping <- read_csv("https://raw.githubusercontent.com/steodose/Club-Soccer-Forecasts/main/team_mapping.csv")
 
-matches <- read_csv("https://projects.fivethirtyeight.com/soccer-api/club/spi_matches_latest.csv") %>%
-  filter(league == 'Barclays Premier League' | league == 'German Bundesliga' | league == 'Spanish Primera Division' |  league == 'French Ligue 1' | league == 'Italy Serie A',
-           season == 2022)
+# fix Nottingham Forest in 538 team mapping data
+team_mapping2 <- team_mapping %>%
+    mutate(team_538 = case_when(
+        team == "Nott'm Forest" ~ "Nottingham Forest",
+        TRUE ~ team_538
+    ))
 
 
+# updated team mappings for 2024-25 fixtures
+team_mapping_2024 <- read_csv('https://raw.githubusercontent.com/steodose/club-elo/main/all_leagues_team_mapping.csv')
+
+# rename
+team_mapping_2024 <- team_mapping_2024 %>%
+  mutate(team = case_when(
+        team == "Tottenham Hotspur" ~ "Tottenham",
+        team == "Newcastle" ~ "Newcastle Utd",
+        team == "Manchester United" ~ "Manchester Utd",
+        team == "West Ham United" ~ "West Ham",
+        team == "Brighton and Hove Albion" ~ "Brighton",
+        team == "AFC Bournemouth" ~ "Bournemouth",
+        team == "Wolverhampton" ~ "Wolves",
+        team == "Nottingham Forest" ~ "Nott'ham Forest",
+        team == "Girona FC" ~ "Girona",
+        team == "Atletico Madrid" ~ "Atlético Madrid",
+        team == "Athletic Bilbao" ~ "Athletic Club",
+        team == "Deportivo Alaves" ~ "Alavés",
+        team == "Sevilla FC" ~ "Sevilla",
+        team == "Real Betis" ~ "Betis",
+        team == "Bayer Leverkusen" ~ "Leverkusen",
+        team == "VfB Stuttgart" ~ "Stuttgart",
+        TRUE ~ team
+    ))
+
+
+# matches <- read_csv("https://projects.fivethirtyeight.com/soccer-api/club/spi_matches_latest.csv") %>%
+#   filter(league == 'Barclays Premier League' | league == 'German Bundesliga' | league == 'Spanish Primera Division' |  league == 'French Ligue 1' | league == 'Italy Serie A',
+#            season == 2022)
+
+# Extra code to get unique teams
+# teams1 <- matches %>%
+#   distinct(team1)
+# 
+# teams2 <- matches %>%
+#   distinct(team2)
+# 
+# teams <- bind_rows(teams1, teams2) %>%
+#   select(team1) %>%
+#   rename(team = team1) %>%
+#   distinct(team) %>%
+#   drop_na
+# 
+# write_csv(teams, "big_5_team_mapping.csv")
+
+
+## Load data V2 from football data
+
+# matches_eng <- read_csv("https://www.football-data.co.uk/mmz4281/2324/E0.csv")
+# matches_esp <- read_csv("https://www.football-data.co.uk/mmz4281/2324/SP1.csv")
+# matches_ger <- read_csv("https://www.football-data.co.uk/mmz4281/2324/D1.csv")
+# matches_fra <- read_csv("https://www.football-data.co.uk/mmz4281/2324/F1.csv")
+# matches_ita <- read_csv("https://www.football-data.co.uk/mmz4281/2324/I1.csv")
+
+## Load data V3 from worldfootballr
+# matches_eng <- worldfootballR::fb_match_results("ENG", "M", season_end_year = 2024)
+# matches_esp <- worldfootballR::fb_match_results("ESP", "M", season_end_year = 2024)
+# matches_ger <- worldfootballR::fb_match_results("GER", "M", season_end_year = 2024)
+# matches_fra <- worldfootballR::fb_match_results("FRA", "M", season_end_year = 2024)
+# matches_ita <- worldfootballR::fb_match_results("ITA", "M", season_end_year = 2024)
+# 
+# 
+# # join all leagues
+# matches <- bind_rows(matches_eng, matches_esp, matches_ger, matches_fra, matches_ita)
+# 
+# matches <- matches %>%
+#    mutate(Div = case_when(
+#         Div == "E0" ~ "EPL",
+#         Div == "SP1" ~ "La Liga",
+#         Div == "D1" ~ "Bundesliga",
+#         Div == "F1" ~ "Ligue 1",
+#         Div == "I1" ~ "Serie A",
+#         TRUE ~ Div
+#     ))
+
+
+# updated matches for 2024-25
+matches <- read_csv('https://raw.githubusercontent.com/steodose/club-elo/main/matches_all_leagues.csv')
+
+# read in latest Elo ratings
+latest_ratings <- read_csv('https://raw.githubusercontent.com/steodose/club-elo/main/latest_ratings.csv')
 
 ```
 
@@ -165,8 +242,8 @@ Inputs {.sidebar}
 ``` {r}
 
  selectInput("leagueInput", label = h3("Select League"), 
-    choices = unique(matches$league),
-    selected="Barclays Premier League", multiple = FALSE)
+    choices = unique(matches$Competition_Name),
+    selected="EPL", multiple = FALSE)
 
 ```
 
@@ -180,10 +257,10 @@ Row
 
 # make dataframe with country names
 country_leagues <- data.frame(country = c("England", "Germany", "Spain", "France", "Italy"),
-                        league = c("Barclays Premier League", "German Bundesliga", "Spanish Primera Division", "French Ligue 1", "Italy Serie A")
+                        league = c("Premier League", "Fußball-Bundesliga", "La Liga", "Ligue 1", "Serie A")
 )
 
-country<- reactive({
+country <- reactive({
   country_leagues %>% 
   filter(league == input$leagueInput) %>% 
   pull(country)
@@ -207,11 +284,11 @@ renderValueBox({
 
 update_date <- reactive({
   matches %>% 
-  filter(league == input$leagueInput) %>% 
+  filter(Competition_Name == input$leagueInput) %>% 
+    select(-Notes, -Round) %>% #remove this field so the next line works properly
     na.omit() %>%
-  summarise(latest_match = max(date))
+  summarise(latest_match = max(Date, na.rm = TRUE))
 })
-
 
 # Put valueBox() inside renderValueBox({})
 renderValueBox({
@@ -226,23 +303,21 @@ renderValueBox({
 Row {.tabset data-height=650}
 -----------------------------------------------------------------------
 
-### League Table
+### League Tables
     
 ```{r}
 
-epl_matches <- reactive({
+league_matches <- reactive({
   matches %>%
-  filter(league == input$leagueInput) %>%
-  mutate(result = score1 - score2,
-           xresult = xg1 - xg2) %>%
-    select(team1, team2, result, xresult, score1, score2, xg1, xg2) %>%
-    pivot_longer(team1:team2, names_to = "home_away", values_to = "team") %>%
+  filter(Competition_Name == input$leagueInput) %>%
+  mutate(result = HomeGoals - AwayGoals) %>%
+    select(Home, Away, HomeGoals, AwayGoals, result) %>%
+    pivot_longer(Home:Away, names_to = "home_away", values_to = "team") %>%
     mutate(
-        result = ifelse(home_away == "team1", result, -result),
-        xresult = ifelse(home_away == "team1", xresult, -xresult),
+        result = ifelse(home_away == "Home", result, -result),
         win = ifelse(result == 0, 0.5, ifelse(result > 0, 1, 0))
     ) %>%
-    select(team, score1, score2, xg1, xg2, win, result, xresult) %>%
+    select(team, HomeGoals, AwayGoals, win, result) %>%
     drop_na() %>%
     group_by(team) %>%
     summarise(
@@ -253,11 +328,10 @@ epl_matches <- reactive({
         Points = (Wins * 3) + (Draws * 1),
         win_perc = (100 * Points / (MP * 3)),
         GD = sum(result),
-        xGD = sum(xresult),
         form = list(win), .groups = "drop"
     ) %>%
-    left_join(team_mapping2, by = c("team" = "team_538")) %>%
-    select(url_logo_espn, team, Points, MP, Wins, Draws, Losses, GD, xGD, win_perc, form) %>%
+    left_join(team_mapping_2024, by = c("team" = "team")) %>%
+    select(url_logo_espn, team, Points, MP, Wins, Draws, Losses, GD, win_perc, form) %>%
     arrange(desc(Points), desc(GD)) %>%
     ungroup() %>%
     mutate(Rank = row_number()) %>%
@@ -274,7 +348,7 @@ epl_matches <- reactive({
 
 # Make current standings table using gt package
 render_gt({
-epl_matches() %>%
+league_matches() %>%
     gt() %>%
     # Relabel columns
     cols_label(
@@ -321,35 +395,35 @@ epl_matches() %>%
             rows = GD > 0
         )
     ) %>%
-    tab_style(
-        style = list(
-            cell_text(color = "red")
-        ),
-        locations = cells_body(
-            columns = vars(xGD),
-            rows = xGD <= 0
-        )
-    ) %>%
-    tab_style(
-        style = list(
-            cell_text(color = "blue")
-        ),
-        locations = cells_body(
-            columns = vars(xGD),
-            rows = xGD > 0
-        )
-    ) %>%
-    fmt_number(
-        columns = vars(xGD),
-        decimals = 1
-    ) %>%
+    # tab_style(
+    #     style = list(
+    #         cell_text(color = "red")
+    #     ),
+    #     locations = cells_body(
+    #         columns = vars(xGD),
+    #         rows = xGD <= 0
+    #     )
+    # ) %>%
+    # tab_style(
+    #     style = list(
+    #         cell_text(color = "blue")
+    #     ),
+    #     locations = cells_body(
+    #         columns = vars(xGD),
+    #         rows = xGD > 0
+    #     )
+    # ) %>%
+    # fmt_number(
+    #     columns = vars(xGD),
+    #     decimals = 1
+    # ) %>%
     cols_align(align = "left",
                columns = 1) %>%
     tab_options(column_labels.font.weight = "bold") %>%
-    tab_header(title = md("**2022-23 League Table**"),
+    tab_header(title = md("**2024-25 League Table**"),
                subtitle = glue("Thru matches played as of date mentioned above.")) %>%
     tab_source_note(
-        source_note = md("DATA: fivethirtyeight.com")) %>%
+        source_note = md("DATA: FBREF.com")) %>%
     gt_plt_bar_pct(column = win_perc, scaled = TRUE, fill = "navy", background = "gray") %>%
     gt_plt_winloss(form, max_wins = 30) %>%
     gt_plt_bar_stack(list_data, width = 60,
@@ -358,11 +432,12 @@ epl_matches() %>%
     tab_footnote(
         footnote = "Share of total available points captured. Win = 3 points, Draw = 1 point, Loss = 0 points.",
         locations = cells_column_labels(vars(win_perc))
-    ) %>%
-    tab_footnote(
-        footnote = "Expected Goals (xG) is the probability a shot will result in a goal based on the characteristics of that shot. Measures  quality of chances created.",
-        locations = cells_column_labels(vars(xGD))
-    )
+    ) 
+  # %>%
+    # tab_footnote(
+    #     footnote = "Expected Goals (xG) is the probability a shot will result in a goal based on the characteristics of that shot. Measures  quality of chances created.",
+    #     locations = cells_column_labels(vars(xGD))
+    # )
 
 })
 
@@ -376,8 +451,78 @@ epl_matches() %>%
     }
 ```
 
+### All Team Ratings
+
+**Big 5 European Team Ratings**
+
+2024-25 ratings coming soon...
+
+``` {r}
+
+# Reactable table setup
+latest_ratings_table <- reactive({
+  latest_ratings %>%
+  left_join(team_mapping_2024) %>%
+  select(url_logo_espn, team, league, country, rating) %>%
+  arrange(desc(rating)) %>%
+  mutate(rank = row_number()
+         ) %>%
+  select(rank, url_logo_espn, team,league, country, rating)
+    })
+
+
+# render reactable table
+renderReactable({
+reactable(latest_ratings_table(),
+          #theme = theme_538,
+                  showSortIcon = TRUE,
+                  searchable = TRUE,
+                  language = reactableLang(
+                      searchPlaceholder = "SEARCH FOR A TEAM..."),
+                  defaultPageSize = 100,
+                  columns = list(
+                    rank = colDef(name = "Rank",
+                                       align = "center"),
+                      team = colDef(name = "Team",
+                                    minWidth = 140,
+                                    align = "left"),
+                    league = colDef(name = "League",
+                                    minWidth = 140,
+                                    align = "left"),
+                    country = colDef(name = "Country",
+                                    minWidth = 140,
+                                    align = "left"),
+                    rating = colDef(name = "Rating",
+                                      align = "right",
+                                      style = color_scales(latest_ratings, colors = paletteer::paletteer_d(
+                                         palette = "ggsci::amber_material"
+                                     )
+                                     ),
+                                      format =  colFormat(digits = 1)),
+                      
+                      ### add logos using embed_img()
+                      url_logo_espn = colDef(
+                          name = "",
+                          maxWidth = 70,
+                          align = "center",
+                          cell = embed_img(height = "25", width = "28")
+                      )
+                      ),
+                  pagination = FALSE,
+                  compact = TRUE, 
+                  borderless = FALSE, 
+                  striped = FALSE,
+                  fullWidth = FALSE, 
+                  defaultColDef = colDef(align = "center", minWidth = 95)
+          )
+})
+
+```
+
+
+
 ### About
 
 **Big 5 European Leagues App**
 
-This dashboard looks at the current tables and statistics for the Big 5 European leagues. All data is sourced from FiveThirtyEight.com unless noted otherwise. App created using R Shiny by [Stephan Teodosescu](https://stephanteodosescu.com).
+This dashboard looks at the current tables and statistics for the Big 5 European leagues. All data is sourced from Football Reference (FBREF.com) unless noted otherwise. App created using R Shiny by [Stephan Teodosescu](https://stephanteodosescu.com).
