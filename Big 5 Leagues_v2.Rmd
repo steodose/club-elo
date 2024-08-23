@@ -172,10 +172,19 @@ team_mapping_2024 <- team_mapping_2024 %>%
         team == "Deportivo Alaves" ~ "Alavés",
         team == "Sevilla FC" ~ "Sevilla",
         team == "Real Betis" ~ "Betis",
-        team == "Bayer Leverkusen" ~ "Leverkusen",
-        team == "VfB Stuttgart" ~ "Stuttgart",
         team == "Internazionale" ~ "Inter",
         team == "AC Milan" ~ "Milan",
+        team == "Bayer Leverkusen" ~ "Leverkusen",
+        team == "VfB Stuttgart" ~ "Stuttgart",
+        team == "Borussia Dortmund" ~ "Dortmund",
+        team == "Eintracht Frankfurt" ~ "Eint Frankfurt",
+        team == "TSG Hoffenheim" ~ "Hoffenheim",
+        team == "SC Freiburg" ~ "Freiburg",
+        team == "FC Augsburg" ~ "Augsburg",
+        team == "VfL Wolfsburg" ~ "Wolfsburg",
+        team == "Mainz 05" ~ "Mainz",
+        team == "Borussia Monchengladbach" ~ "Gladbach",
+        team == "Bochum" ~ "VfLBochum",
         TRUE ~ team
     ))
 
