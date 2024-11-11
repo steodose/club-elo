@@ -25,10 +25,10 @@ Premier League,M,ENG,2025,NA,11,Sat,2024-11-09,15:00,Crystal Palace,0,1.5,Fulham
 Premier League,M,ENG,2025,NA,11,Sat,2024-11-09,15:00,Wolves,2,1.3,Southampton,0,0.6,31403,Molineux Stadium,Thomas Bramall,NA,https://fbref.com/en/matches/dbec2d40/Wolverhampton-Wanderers-Southampton-November-9-2024-Premier-League
 Premier League,M,ENG,2025,NA,11,Sat,2024-11-09,17:30,Brighton,2,2.3,Manchester City,1,2.1,NA,The American Express Stadium,Samuel Barrott,NA,https://fbref.com/en/matches/62aa7905/Brighton-and-Hove-Albion-Manchester-City-November-9-2024-Premier-League
 Premier League,M,ENG,2025,NA,11,Sat,2024-11-09,20:00,Liverpool,2,2,Aston Villa,0,1.2,NA,Anfield,David Coote,NA,https://fbref.com/en/matches/737af5bf/Liverpool-Aston-Villa-November-9-2024-Premier-League
-Premier League,M,ENG,2025,NA,11,Sun,2024-11-10,14:00,Manchester Utd,NA,NA,Leicester City,NA,NA,NA,Old Trafford,,NA,https://fbref.com/en/stathead/matchup/teams/a2d435b3/19538871/Leicester-City-vs-Manchester-United-History
-Premier League,M,ENG,2025,NA,11,Sun,2024-11-10,14:00,Nott'ham Forest,NA,NA,Newcastle Utd,NA,NA,NA,The City Ground,,NA,https://fbref.com/en/stathead/matchup/teams/e4a775cb/b2b47a98/Nottingham-Forest-vs-Newcastle-United-History
-Premier League,M,ENG,2025,NA,11,Sun,2024-11-10,14:00,Tottenham,NA,NA,Ipswich Town,NA,NA,NA,Tottenham Hotspur Stadium,,NA,https://fbref.com/en/stathead/matchup/teams/b74092de/361ca564/Ipswich-Town-vs-Tottenham-Hotspur-History
-Premier League,M,ENG,2025,NA,11,Sun,2024-11-10,16:30,Chelsea,NA,NA,Arsenal,NA,NA,NA,Stamford Bridge,,NA,https://fbref.com/en/stathead/matchup/teams/cff3d9bb/18bb7c10/North-West-London-Derby-Chelsea-vs-Arsenal-History
+Premier League,M,ENG,2025,NA,11,Sun,2024-11-10,14:00,Manchester Utd,3,0.8,Leicester City,0,0.6,73829,Old Trafford,Peter Bankes,NA,https://fbref.com/en/matches/35888afe/Manchester-United-Leicester-City-November-10-2024-Premier-League
+Premier League,M,ENG,2025,NA,11,Sun,2024-11-10,14:00,Nott'ham Forest,1,0.6,Newcastle Utd,3,1.6,30145,The City Ground,Anthony Taylor,NA,https://fbref.com/en/matches/a41ce5c3/Nottingham-Forest-Newcastle-United-November-10-2024-Premier-League
+Premier League,M,ENG,2025,NA,11,Sun,2024-11-10,14:00,Tottenham,1,1.5,Ipswich Town,2,1.6,61505,Tottenham Hotspur Stadium,Darren England,NA,https://fbref.com/en/matches/f9b9c3c4/Tottenham-Hotspur-Ipswich-Town-November-10-2024-Premier-League
+Premier League,M,ENG,2025,NA,11,Sun,2024-11-10,16:30,Chelsea,1,1.5,Arsenal,1,1.5,NA,Stamford Bridge,Michael Oliver,NA,https://fbref.com/en/matches/2874d56e/North-West-London-Derby-Chelsea-Arsenal-November-10-2024-Premier-League
 Premier League,M,ENG,2025,NA,12,Sat,2024-11-23,12:30,Leicester City,NA,NA,Chelsea,NA,NA,NA,King Power Stadium,,NA,https://fbref.com/en/stathead/matchup/teams/cff3d9bb/a2d435b3/Chelsea-vs-Leicester-City-History
 Premier League,M,ENG,2025,NA,12,Sat,2024-11-23,15:00,Arsenal,NA,NA,Nott'ham Forest,NA,NA,NA,Emirates Stadium,,NA,https://fbref.com/en/stathead/matchup/teams/e4a775cb/18bb7c10/Nottingham-Forest-vs-Arsenal-History
 Premier League,M,ENG,2025,NA,12,Sat,2024-11-23,15:00,Bournemouth,NA,NA,Brighton,NA,NA,NA,Vitality Stadium,,NA,https://fbref.com/en/stathead/matchup/teams/d07537b9/4ba7cbea/Brighton-and-Hove-Albion-vs-Bournemouth-History
@@ -424,11 +424,11 @@ La Liga,M,ESP,2025,NA,13,Sat,2024-11-09,14:00,Real Madrid,4,3.1,Osasuna,0,0.1,72
 La Liga,M,ESP,2025,NA,13,Sat,2024-11-09,16:15,Villarreal,3,1.5,Alavés,0,0.5,17659,Estadio de la Cerámica,Alejandro Quintero,,https://fbref.com/en/matches/570273ee/Villarreal-Alaves-November-9-2024-La-Liga
 La Liga,M,ESP,2025,NA,13,Sat,2024-11-09,18:30,Espanyol,NA,NA,Valencia,NA,NA,NA,Stage Front Stadium,,Match Postponed,NA
 La Liga,M,ESP,2025,NA,13,Sat,2024-11-09,21:00,Leganés,1,1.1,Sevilla,0,0.6,11167,Estadio Municipal de Butarque,Juan Pulido,,https://fbref.com/en/matches/7925ae38/Leganes-Sevilla-November-9-2024-La-Liga
-La Liga,M,ESP,2025,NA,13,Sun,2024-11-10,14:00,Betis,NA,NA,Celta Vigo,NA,NA,NA,Estadio Benito Villamarín,,,https://fbref.com/en/stathead/matchup/teams/fc536746/f25da7fb/Real-Betis-vs-Celta-Vigo-History
-La Liga,M,ESP,2025,NA,13,Sun,2024-11-10,16:15,Mallorca,NA,NA,Atlético Madrid,NA,NA,NA,Estadi Mallorca Son Moix,,,https://fbref.com/en/stathead/matchup/teams/db3b9613/2aa12281/Atletico-Madrid-vs-Mallorca-History
-La Liga,M,ESP,2025,NA,13,Sun,2024-11-10,18:30,Getafe,NA,NA,Girona,NA,NA,NA,Coliseum Alfonso Pérez,,,https://fbref.com/en/stathead/matchup/teams/9024a00a/7848bd64/Girona-vs-Getafe-History
-La Liga,M,ESP,2025,NA,13,Sun,2024-11-10,18:30,Valladolid,NA,NA,Athletic Club,NA,NA,NA,Estadio Municipal José Zorrilla,,,https://fbref.com/en/stathead/matchup/teams/2b390eca/17859612/Athletic-Club-vs-Valladolid-History
-La Liga,M,ESP,2025,NA,13,Sun,2024-11-10,21:00,Real Sociedad,NA,NA,Barcelona,NA,NA,NA,Reale Arena,,,https://fbref.com/en/stathead/matchup/teams/e31d1cd9/206d90db/Real-Sociedad-vs-Barcelona-History
+La Liga,M,ESP,2025,NA,13,Sun,2024-11-10,14:00,Betis,2,1.4,Celta Vigo,2,1.3,54015,Estadio Benito Villamarín,Miguel Ángel Ortiz Arias,,https://fbref.com/en/matches/2307f9b9/Real-Betis-Celta-Vigo-November-10-2024-La-Liga
+La Liga,M,ESP,2025,NA,13,Sun,2024-11-10,16:15,Mallorca,0,0.6,Atlético Madrid,1,0.6,19500,Estadi Mallorca Son Moix,Jose Maria Sánchez,,https://fbref.com/en/matches/f6040fa5/Mallorca-Atletico-Madrid-November-10-2024-La-Liga
+La Liga,M,ESP,2025,NA,13,Sun,2024-11-10,18:30,Getafe,0,0.6,Girona,1,0.2,10923,Coliseum Alfonso Pérez,Juan Martínez,,https://fbref.com/en/matches/26d75d6d/Getafe-Girona-November-10-2024-La-Liga
+La Liga,M,ESP,2025,NA,13,Sun,2024-11-10,18:30,Valladolid,1,0.6,Athletic Club,1,1.4,23515,Estadio Municipal José Zorrilla,Adrián Cordero,,https://fbref.com/en/matches/57eb3b4f/Valladolid-Athletic-Club-November-10-2024-La-Liga
+La Liga,M,ESP,2025,NA,13,Sun,2024-11-10,21:00,Real Sociedad,1,1.8,Barcelona,0,0.6,36194,Reale Arena,Guillermo Cuadra,,https://fbref.com/en/matches/5f83ac85/Real-Sociedad-Barcelona-November-10-2024-La-Liga
 La Liga,M,ESP,2025,NA,14,Fri,2024-11-22,21:00,Getafe,NA,NA,Valladolid,NA,NA,NA,Coliseum Alfonso Pérez,,,https://fbref.com/en/stathead/matchup/teams/7848bd64/17859612/Getafe-vs-Valladolid-History
 La Liga,M,ESP,2025,NA,14,Sat,2024-11-23,14:00,Valencia,NA,NA,Betis,NA,NA,NA,Estadio de Mestalla,,,https://fbref.com/en/stathead/matchup/teams/fc536746/dcc91a7b/Real-Betis-vs-Valencia-History
 La Liga,M,ESP,2025,NA,14,Sat,2024-11-23,16:15,Atlético Madrid,NA,NA,Alavés,NA,NA,NA,Riyadh Air Metropolitan Stadium,,,https://fbref.com/en/stathead/matchup/teams/db3b9613/8d6fd021/Atletico-Madrid-vs-Alaves-History
@@ -774,9 +774,9 @@ Fußball-Bundesliga,M,GER,2025,NA,10,Sat,2024-11-09,15:30,Bochum,1,0.7,Leverkuse
 Fußball-Bundesliga,M,GER,2025,NA,10,Sat,2024-11-09,15:30,Werder Bremen,2,1.7,Holstein Kiel,1,0.7,42100,Weserstadion,Sören Storks,NA,https://fbref.com/en/matches/58ac698f/Werder-Bremen-Holstein-Kiel-November-9-2024-Bundesliga
 Fußball-Bundesliga,M,GER,2025,NA,10,Sat,2024-11-09,15:30,Mainz 05,3,2,Dortmund,1,0.9,33000,Mewa Arena,Florian Badstübner,NA,https://fbref.com/en/matches/ff7bcb61/Mainz-05-Dortmund-November-9-2024-Bundesliga
 Fußball-Bundesliga,M,GER,2025,NA,10,Sat,2024-11-09,18:30,RB Leipzig,0,1,Gladbach,0,0.9,46887,Red Bull Arena,Christian Dingert,NA,https://fbref.com/en/matches/639bf27f/RB-Leipzig-Monchengladbach-November-9-2024-Bundesliga
-Fußball-Bundesliga,M,GER,2025,NA,10,Sun,2024-11-10,15:30,Augsburg,NA,NA,Hoffenheim,NA,NA,NA,WWK Arena,,NA,https://fbref.com/en/stathead/matchup/teams/0cdc4311/033ea6b8/Augsburg-vs-Hoffenheim-History
-Fußball-Bundesliga,M,GER,2025,NA,10,Sun,2024-11-10,17:30,Stuttgart,NA,NA,Eint Frankfurt,NA,NA,NA,MHPArena,,NA,https://fbref.com/en/stathead/matchup/teams/f0ac8ee6/598bc722/Eintracht-Frankfurt-vs-Stuttgart-History
-Fußball-Bundesliga,M,GER,2025,NA,10,Sun,2024-11-10,19:30,Heidenheim,NA,NA,Wolfsburg,NA,NA,NA,Voith-Arena,,NA,https://fbref.com/en/stathead/matchup/teams/4eaa11d7/18d9d2a7/Wolfsburg-vs-Heidenheim-History
+Fußball-Bundesliga,M,GER,2025,NA,10,Sun,2024-11-10,15:30,Augsburg,0,0.8,Hoffenheim,0,0.4,28300,WWK Arena,Martin Petersen,NA,https://fbref.com/en/matches/67fa64af/Augsburg-Hoffenheim-November-10-2024-Bundesliga
+Fußball-Bundesliga,M,GER,2025,NA,10,Sun,2024-11-10,17:30,Stuttgart,2,2.5,Eint Frankfurt,3,1.3,60000,MHPArena,Felix Zwayer,NA,https://fbref.com/en/matches/2155226b/Stuttgart-Eintracht-Frankfurt-November-10-2024-Bundesliga
+Fußball-Bundesliga,M,GER,2025,NA,10,Sun,2024-11-10,19:30,Heidenheim,1,2.1,Wolfsburg,3,1.5,15000,Voith-Arena,Harm Osmers,NA,https://fbref.com/en/matches/27da1c68/Heidenheim-Wolfsburg-November-10-2024-Bundesliga
 Fußball-Bundesliga,M,GER,2025,NA,11,Fri,2024-11-22,20:30,Bayern Munich,NA,NA,Augsburg,NA,NA,NA,Allianz Arena,,NA,https://fbref.com/en/stathead/matchup/teams/0cdc4311/054efa67/Augsburg-vs-Bayern-Munich-History
 Fußball-Bundesliga,M,GER,2025,NA,11,Sat,2024-11-23,15:30,Wolfsburg,NA,NA,Union Berlin,NA,NA,NA,Volkswagen Arena,,NA,https://fbref.com/en/stathead/matchup/teams/7a41008f/4eaa11d7/Union-Berlin-vs-Wolfsburg-History
 Fußball-Bundesliga,M,GER,2025,NA,11,Sat,2024-11-23,15:30,Leverkusen,NA,NA,Heidenheim,NA,NA,NA,BayArena,,NA,https://fbref.com/en/stathead/matchup/teams/c7a9f859/18d9d2a7/Leverkusen-vs-Heidenheim-History
@@ -1083,15 +1083,15 @@ Ligue 1,M,FRA,2025,NA,10,Sun,2024-11-03,15:00,Toulouse,1,0.9,Reims,0,1.1,NA,Stad
 Ligue 1,M,FRA,2025,NA,10,Sun,2024-11-03,17:00,Le Havre,1,2.2,Montpellier,0,1,NA,Stade Océane,Stéphanie Frappart,NA,https://fbref.com/en/matches/a537aa6e/Le-Havre-Montpellier-November-3-2024-Ligue-1
 Ligue 1,M,FRA,2025,NA,10,Sun,2024-11-03,17:00,Auxerre,4,2.8,Rennes,0,0.9,NA,Stade de l'Abbé Deschamps,Gaël Angoula,NA,https://fbref.com/en/matches/acc30562/Auxerre-Rennes-November-3-2024-Ligue-1
 Ligue 1,M,FRA,2025,NA,10,Sun,2024-11-03,20:45,Nantes,1,1.4,Marseille,2,1.2,NA,Stade de la Beaujoire - Louis Fonteneau,Bastien Dechepy,NA,https://fbref.com/en/matches/53893177/Nantes-Marseille-November-3-2024-Ligue-1
-Ligue 1,M,FRA,2025,NA,11,Fri,2024-11-08,20:45,Marseille,1,2.5,Auxerre,3,1.9,NA,Orange Vélodrome,Marc Bollengier,NA,https://fbref.com/en/matches/4ab63460/Marseille-Auxerre-November-8-2024-Ligue-1
-Ligue 1,M,FRA,2025,NA,11,Sat,2024-11-09,17:00,Strasbourg,1,0.6,Monaco,3,3.8,NA,Stade de la Meinau,Bastien Dechepy,NA,https://fbref.com/en/matches/cd41b272/Strasbourg-Monaco-November-9-2024-Ligue-1
-Ligue 1,M,FRA,2025,NA,11,Sat,2024-11-09,19:00,Lens,3,2.9,Nantes,2,1.4,NA,Stade Bollaert-Delelis,Clément Turpin,NA,https://fbref.com/en/matches/172c33b7/Lens-Nantes-November-9-2024-Ligue-1
-Ligue 1,M,FRA,2025,NA,11,Sat,2024-11-09,21:00,Angers,2,1.1,Paris S-G,4,3.4,NA,Stade Raymond Kopa,Benoît Millot,NA,https://fbref.com/en/matches/ddf738c4/Angers-Paris-Saint-Germain-November-9-2024-Ligue-1
-Ligue 1,M,FRA,2025,NA,11,Sun,2024-11-10,15:00,Nice,NA,NA,Lille,NA,NA,NA,Allianz Riviera,,NA,https://fbref.com/en/stathead/matchup/teams/cb188c0c/132ebc33/Lille-vs-Nice-History
-Ligue 1,M,FRA,2025,NA,11,Sun,2024-11-10,17:00,Le Havre,NA,NA,Reims,NA,NA,NA,Stade Océane,,NA,https://fbref.com/en/stathead/matchup/teams/7fdd64e0/5c2737db/Reims-vs-Le-Havre-History
-Ligue 1,M,FRA,2025,NA,11,Sun,2024-11-10,17:00,Montpellier,NA,NA,Brest,NA,NA,NA,Stade de la Mosson-Mondial 98,,NA,https://fbref.com/en/stathead/matchup/teams/fb08dbb3/281b0e73/Brest-vs-Montpellier-History
-Ligue 1,M,FRA,2025,NA,11,Sun,2024-11-10,17:00,Rennes,NA,NA,Toulouse,NA,NA,NA,Roazhon Park,,NA,https://fbref.com/en/stathead/matchup/teams/b3072e00/3f8c4b5f/Rennes-vs-Toulouse-History
-Ligue 1,M,FRA,2025,NA,11,Sun,2024-11-10,20:45,Lyon,NA,NA,Saint-Étienne,NA,NA,NA,Groupama Stadium,,NA,https://fbref.com/en/stathead/matchup/teams/d53c0b06/d298ef2c/Lyon-vs-Saint-Etienne-History
+Ligue 1,M,FRA,2025,NA,11,Fri,2024-11-08,20:45,Marseille,1,2.5,Auxerre,3,1.9,64184,Orange Vélodrome,Marc Bollengier,NA,https://fbref.com/en/matches/4ab63460/Marseille-Auxerre-November-8-2024-Ligue-1
+Ligue 1,M,FRA,2025,NA,11,Sat,2024-11-09,17:00,Strasbourg,1,0.6,Monaco,3,3.8,19451,Stade de la Meinau,Bastien Dechepy,NA,https://fbref.com/en/matches/cd41b272/Strasbourg-Monaco-November-9-2024-Ligue-1
+Ligue 1,M,FRA,2025,NA,11,Sat,2024-11-09,19:00,Lens,3,2.9,Nantes,2,1.4,38202,Stade Bollaert-Delelis,Clément Turpin,NA,https://fbref.com/en/matches/172c33b7/Lens-Nantes-November-9-2024-Ligue-1
+Ligue 1,M,FRA,2025,NA,11,Sat,2024-11-09,21:00,Angers,2,1.1,Paris S-G,4,3.4,17212,Stade Raymond Kopa,Benoît Millot,NA,https://fbref.com/en/matches/ddf738c4/Angers-Paris-Saint-Germain-November-9-2024-Ligue-1
+Ligue 1,M,FRA,2025,NA,11,Sun,2024-11-10,15:00,Nice,2,2.1,Lille,2,1.7,25063,Allianz Riviera,Jeremy Stinat,NA,https://fbref.com/en/matches/e213d881/Nice-Lille-November-10-2024-Ligue-1
+Ligue 1,M,FRA,2025,NA,11,Sun,2024-11-10,17:00,Le Havre,0,1.4,Reims,3,2.6,19256,Stade Océane,Hakim Ben El Hadj Salem,NA,https://fbref.com/en/matches/63390fe7/Le-Havre-Reims-November-10-2024-Ligue-1
+Ligue 1,M,FRA,2025,NA,11,Sun,2024-11-10,17:00,Montpellier,3,2.5,Brest,1,0.9,12936,Stade de la Mosson-Mondial 98,Jérémie Pignard,NA,https://fbref.com/en/matches/8ab9a941/Montpellier-Brest-November-10-2024-Ligue-1
+Ligue 1,M,FRA,2025,NA,11,Sun,2024-11-10,17:00,Rennes,0,0.6,Toulouse,2,1.5,27525,Roazhon Park,Romain Lissorgue,NA,https://fbref.com/en/matches/a7965d75/Rennes-Toulouse-November-10-2024-Ligue-1
+Ligue 1,M,FRA,2025,NA,11,Sun,2024-11-10,20:45,Lyon,1,1.1,Saint-Étienne,0,0.6,58082,Groupama Stadium,Willy Delajod,NA,https://fbref.com/en/matches/e552596a/Lyon-Saint-Etienne-November-10-2024-Ligue-1
 Ligue 1,M,FRA,2025,NA,12,Fri,2024-11-22,19:00,Monaco,NA,NA,Brest,NA,NA,NA,Stade Louis II,,NA,https://fbref.com/en/stathead/matchup/teams/fd6114db/fb08dbb3/Monaco-vs-Brest-History
 Ligue 1,M,FRA,2025,NA,12,Fri,2024-11-22,21:00,Paris S-G,NA,NA,Toulouse,NA,NA,NA,Parc des Princes,,NA,https://fbref.com/en/stathead/matchup/teams/e2d8892c/3f8c4b5f/Paris-Saint-Germain-vs-Toulouse-History
 Ligue 1,M,FRA,2025,NA,12,Sat,2024-11-23,17:00,Lens,NA,NA,Marseille,NA,NA,NA,Stade Bollaert-Delelis,,NA,https://fbref.com/en/stathead/matchup/teams/fd4e0f7d/5725cc7b/Lens-vs-Marseille-History
@@ -1406,11 +1406,11 @@ Serie A,M,ITA,2025,NA,12,Fri,2024-11-08,20:45,Lecce,1,1.6,Empoli,1,0.6,NA,Stadio
 Serie A,M,ITA,2025,NA,12,Sat,2024-11-09,15:00,Venezia,1,0.8,Parma,2,1,NA,Stadio Pier Luigi Penzo,Daniele Chiffi,,https://fbref.com/en/matches/8b0cfe1d/Venezia-Parma-November-9-2024-Serie-A
 Serie A,M,ITA,2025,NA,12,Sat,2024-11-09,18:00,Cagliari,3,1.7,Milan,3,3.3,NA,Unipol Domus,Michael Fabbri,,https://fbref.com/en/matches/23026b6f/Cagliari-Milan-November-9-2024-Serie-A
 Serie A,M,ITA,2025,NA,12,Sat,2024-11-09,20:45,Juventus,2,1.7,Torino,0,0.4,NA,Allianz Stadium,Simone Sozza,,https://fbref.com/en/matches/51962386/Juventus-Torino-November-9-2024-Serie-A
-Serie A,M,ITA,2025,NA,12,Sun,2024-11-10,12:30,Atalanta,NA,NA,Udinese,NA,NA,NA,Gewiss Stadium,,,https://fbref.com/en/stathead/matchup/teams/922493f3/04eea015/Atalanta-vs-Udinese-History
-Serie A,M,ITA,2025,NA,12,Sun,2024-11-10,15:00,Roma,NA,NA,Bologna,NA,NA,NA,Stadio Olimpico,,,https://fbref.com/en/stathead/matchup/teams/cf74a709/1d8099f8/Roma-vs-Bologna-History
-Serie A,M,ITA,2025,NA,12,Sun,2024-11-10,15:00,Fiorentina,NA,NA,Hellas Verona,NA,NA,NA,Stadio Artemio Franchi,,,https://fbref.com/en/stathead/matchup/teams/421387cf/0e72edf2/Fiorentina-vs-Hellas-Verona-History
-Serie A,M,ITA,2025,NA,12,Sun,2024-11-10,18:00,Monza,NA,NA,Lazio,NA,NA,NA,U-Power Stadium,,,https://fbref.com/en/stathead/matchup/teams/7213da33/21680aa4/Lazio-vs-Monza-History
-Serie A,M,ITA,2025,NA,12,Sun,2024-11-10,20:45,Inter,NA,NA,Napoli,NA,NA,NA,Stadio Giuseppe Meazza,,,https://fbref.com/en/stathead/matchup/teams/d609edc0/d48ad4ff/Internazionale-vs-Napoli-History
+Serie A,M,ITA,2025,NA,12,Sun,2024-11-10,12:30,Atalanta,2,0.9,Udinese,1,0.8,NA,Gewiss Stadium,Marco Di Bello,,https://fbref.com/en/matches/fcc555f9/Atalanta-Udinese-November-10-2024-Serie-A
+Serie A,M,ITA,2025,NA,12,Sun,2024-11-10,15:00,Roma,2,1.3,Bologna,3,1.7,NA,Stadio Olimpico,Gianluca Manganiello,,https://fbref.com/en/matches/b93d514f/Roma-Bologna-November-10-2024-Serie-A
+Serie A,M,ITA,2025,NA,12,Sun,2024-11-10,15:00,Fiorentina,3,1.9,Hellas Verona,1,0.4,NA,Stadio Artemio Franchi,Luca Zufferli,,https://fbref.com/en/matches/c9d4e593/Fiorentina-Hellas-Verona-November-10-2024-Serie-A
+Serie A,M,ITA,2025,NA,12,Sun,2024-11-10,18:00,Monza,0,1,Lazio,1,1.6,NA,U-Power Stadium,Andrea Colombo,,https://fbref.com/en/matches/90116cdb/Monza-Lazio-November-10-2024-Serie-A
+Serie A,M,ITA,2025,NA,12,Sun,2024-11-10,20:45,Inter,1,1.5,Napoli,1,0.7,NA,Stadio Giuseppe Meazza,Maurizio Mariani,,https://fbref.com/en/matches/8a3f7f87/Internazionale-Napoli-November-10-2024-Serie-A
 Serie A,M,ITA,2025,NA,13,Sat,2024-11-23,15:00,Hellas Verona,NA,NA,Inter,NA,NA,NA,Stadio Marc'Antonio Bentegodi,,,https://fbref.com/en/stathead/matchup/teams/d609edc0/0e72edf2/Internazionale-vs-Hellas-Verona-History
 Serie A,M,ITA,2025,NA,13,Sat,2024-11-23,18:00,Milan,NA,NA,Juventus,NA,NA,NA,Stadio Giuseppe Meazza,,,https://fbref.com/en/stathead/matchup/teams/e0652b02/dc56fe14/Juventus-vs-Milan-History
 Serie A,M,ITA,2025,NA,13,Sat,2024-11-23,20:45,Parma,NA,NA,Atalanta,NA,NA,NA,Stadio Ennio Tardini,,,https://fbref.com/en/stathead/matchup/teams/eab4234c/922493f3/Parma-vs-Atalanta-History
