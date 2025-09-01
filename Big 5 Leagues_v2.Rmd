@@ -239,11 +239,14 @@ team_mapping_2024 <- team_mapping_2024 %>%
 #     ))
 
 
-# updated matches for 2024-25
+# updated matches
 matches <- read_csv('https://raw.githubusercontent.com/steodose/club-elo/main/matches_all_leagues.csv')
 
 # read in latest Elo ratings
 latest_ratings <- read_csv('https://raw.githubusercontent.com/steodose/club-elo/main/latest_ratings.csv')
+
+# read in latest simulations
+simulations <- read_csv('https://raw.githubusercontent.com/steodose/club-elo/refs/heads/main/simulations.csv')
 
 ```
 
@@ -431,7 +434,7 @@ league_matches() %>%
     cols_align(align = "left",
                columns = 1) %>%
     tab_options(column_labels.font.weight = "bold") %>%
-    tab_header(title = md("**2024-25 League Table**"),
+    tab_header(title = md("**2025-26 League Table**"),
                subtitle = glue("Thru matches played as of date mentioned above.")) %>%
     tab_source_note(
         source_note = md("DATA: FBREF.com")) %>%
@@ -466,7 +469,7 @@ league_matches() %>%
 
 **Big 5 European Team Ratings**
 
-2024-25 ratings coming soon...
+2025-26 ratings coming soon...
 
 ``` {r}
 
@@ -530,6 +533,112 @@ reactable(latest_ratings_table(),
 
 ```
 
+### Forecasts
+
+2025-25 forecasts coming soon...
+
+```{r}
+
+## Probabilities by position table
+iSim <- 10000
+
+league_table <- table(simulations$Team, simulations$Rank)/iSim
+
+league_table2 <- as.data.frame(league_table) %>% # Convert table to data frame
+    rename(Team = Var1, Placement = Var2) %>% 
+    arrange(Placement, desc(Freq))
+
+league_table2$Freq <- round(league_table2$Freq, 2)
+
+league_table3 <- league_table2 %>% 
+    pivot_wider(names_from = Placement,
+                values_from = Freq)
+
+
+## create color palette to be used in bar plot based on input data
+chicklets_pal <- c(
+    "gray85",
+    rep("gray70", length(league_table2$Freq) - 19), 
+    "#ff0078"
+)
+
+# prep for gt heatmap
+
+league_table3 <- league_table3 %>% 
+    mutate(Rank = row_number()) %>% 
+    relocate(Rank)
+
+league_table_gt <- left_join(league_table3, team_mapping_2024, by = c("Team" = "team"))
+
+league_table_gt2 <- league_table_gt %>% 
+    mutate(Rank = row_number()) %>% 
+    relocate(Rank) %>% 
+    select(Rank, url_logo_espn, 2:22) %>% 
+    rename(logo = url_logo_espn)
+
+# put in rank order
+league_table_gt3 <- league_table_gt2[
+    with(league_table_gt2, order(-`1`, -`2`, -`3`, -`4`, -`5`, -`6`, -`7`, -`8`, -`9`, -`10`,-`11`, -`12`, -`13`, -`14`, -`15`, -`16`, -`17`, -`18`, -`19`, -`20`)),] %>% 
+    mutate(Rank = row_number())
+
+
+# make gt table
+render_gt({
+  league_table_gt3 %>% 
+    gt() %>% 
+    cols_label(Rank = "",
+               logo = "",
+               Team = "") %>% 
+    tab_header(
+        title = md("**Premier League Simulations**"), 
+        subtitle = paste0("2025-26 Season | Updated ", format(Sys.Date(), format="%B %d, %Y"))
+    )  %>% 
+    text_transform(
+        locations = cells_body(vars(logo)),
+        fn = function(x) {
+            web_image(url = x, 
+                      height = px(30)) 
+        }
+    ) %>%
+    fmt_percent(
+        columns = vars(`1`:`20`),
+        decimals = 1
+    )  %>%
+    data_color(
+        columns = vars(`1`:`20`),
+        colors = scales::col_numeric(
+            palette = paletteer::paletteer_d(
+                palette = "ggsci::amber_material",
+                direction  = 1
+            ) %>% as.character(),
+            domain = c(0, 1), 
+            na.color = "#00441BFF"
+        )
+    ) %>%
+    tab_options(
+        column_labels.background.color = "white",
+        table.border.top.width = px(3),
+        table.border.top.color = "white",
+        table.border.bottom.color = "white",
+        table.border.bottom.width = px(3),
+        column_labels.border.top.width = px(3),
+        column_labels.border.top.color = "white",
+        column_labels.border.bottom.width = px(3),
+        column_labels.border.bottom.color = "black",
+        data_row.padding = px(3),
+        source_notes.font.size = 12,
+        table.font.size = 16,
+        heading.align = "left"
+    )  %>%
+    tab_source_note(
+        source_note = md("Table: @steodosescu | Data: football-data.co.uk")
+    )
+
+})
+
+
+
+```
 
 
 ### About
