@@ -1,5 +1,4 @@
 library(tidyverse)
-library(worldfootballR)
 
 # worldfootballR is no longer being maintained
 # matches_eng <- worldfootballR::fb_match_results("ENG", "M", season_end_year = 2026)

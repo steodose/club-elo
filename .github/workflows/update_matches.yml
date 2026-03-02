@@ -2,23 +2,29 @@ name: update-matches
 
 on:
   schedule:
-    - cron: '00 23 * * SUN,MON,THU'
+    - cron: "00 23 * * SUN,MON,THU"
   workflow_dispatch:
 
+permissions:
+  contents: write
+
+concurrency:
+  group: update-matches
+  cancel-in-progress: true
+
 jobs:
-  run-sims-script:
-    name: Run R script and output matches csv
+  run-matches-script:
+    name: Run R script and update matches csv
     runs-on: ubuntu-latest
-    env:
-      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
-      R_LIBS_USER: ~/.R/library
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - uses: r-lib/actions/setup-r@v2
         with:
-          r-version: '4.2.3'
+          r-version: "4.2.3"
 
       - name: Install system dependencies
         run: |
@@ -33,25 +39,35 @@ jobs:
             libtiff5-dev \
             libjpeg-dev \
             libfontconfig1-dev
-        shell: bash
 
-      - name: Set R library path
-        run: echo "R_LIBS_USER=${HOME}/R/library" >> $GITHUB_ENV
-
-      - name: Install R packages
-        run: |
-          dir.create(Sys.getenv("R_LIBS_USER"), recursive = TRUE, showWarnings = FALSE)
-          install.packages(c("tidyverse", "worldfootballR"), lib=Sys.getenv("R_LIBS_USER"), repos="https://cran.rstudio.com/")
-        shell: Rscript {0}
+      # Installs + caches R packages automatically
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          # keep this list minimal
+          packages: |
+            any::tidyverse
+            any::lubridate
+            any::readr
+          cache-version: 1
 
       - name: Run matches script
-        run: |
-          Rscript -e '.libPaths(Sys.getenv("R_LIBS_USER")); source("update_matches.R")'
-        shell: bash
+        run: Rscript update_matches.R
 
       - name: Commit results
         run: |
-          git config --local user.email "actions@github.com"
-          git config --local user.name "GitHub Actions"
-          git add .
-          git diff --quiet || (git commit -m 'Automated run to update matches' && git push)
+          git config user.email "actions@github.com"
+          git config user.name "GitHub Actions"
+
+          # only stage the artifact(s) you expect to change
+          git add matches_all_leagues.csv
+
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+            exit 0
+          fi
+
+          git commit -m "Automated run to update matches"
+
+          # avoid non-fast-forward failures if remote moved
+          git pull --rebase
+          git push
