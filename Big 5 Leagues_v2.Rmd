@@ -22,18 +22,18 @@ color:white!important;
 <style type="text/css">
 
 .chart-title {  /* chart_title  */
-   font-size: 15px
-
+   font-size: 15px;
+}
 </style>
 
 
 ```{r global, include = FALSE}
 library(flexdashboard)
+library(lubridate)
 library(shiny)
 library(reactable)
 library(reactablefmtr)
 library(htmltools)
-library(worldfootballR)
 library(tidyverse)
 library(rvest)
 library(extrafont)
@@ -136,6 +136,49 @@ gt_theme_538 <- function(data,...) {
         ) 
 }
 
+## new function to clean/normalize matches data schema with old schema now that worldfootballR has been deprecated
+
+clean_matches <- function(df) {
+
+  # If the file is already in your "old" schema, keep it working
+  has_old <- all(c("Competition_Name","Home","Away","HomeGoals","AwayGoals","Date") %in% names(df))
+
+  if (!has_old) {
+    # football-data.co.uk schema
+    # Expect: Div, Date (dd/mm/yyyy), HomeTeam, AwayTeam, FTHG, FTAG
+
+    df <- df %>%
+      mutate(
+        # Parse date (football-data uses d/m/Y)
+        Date = suppressWarnings(lubridate::dmy(Date)),
+
+        # Standardize columns your app expects
+        Home = if ("Home" %in% names(df)) Home else HomeTeam,
+        Away = if ("Away" %in% names(df)) Away else AwayTeam,
+
+        HomeGoals = if ("HomeGoals" %in% names(df)) HomeGoals else as.numeric(FTHG),
+        AwayGoals = if ("AwayGoals" %in% names(df)) AwayGoals else as.numeric(FTAG),
+
+        # League name your UI uses
+        Competition_Name = case_when(
+          Div == "E0"  ~ "Premier League",
+          Div == "D1"  ~ "Fußball-Bundesliga",
+          Div == "SP1" ~ "La Liga",
+          Div == "F1"  ~ "Ligue 1",
+          Div == "I1"  ~ "Serie A",
+          TRUE ~ as.character(Div)
+        )
+      )
+  } else {
+    # Old schema: just make sure Date is Date
+    df <- df %>% mutate(Date = as.Date(Date))
+  }
+
+  # Return a consistent minimum set + keep extras if you want them later
+  df %>%
+    select(Competition_Name, Date, Home, Away, HomeGoals, AwayGoals, everything())
+}
+
 ```
 
 
@@ -185,62 +228,24 @@ team_mapping_2024 <- team_mapping_2024 %>%
         team == "Mainz 05" ~ "Mainz",
         team == "Borussia Monchengladbach" ~ "Gladbach",
         team == "Bochum" ~ "VfLBochum",
+        team == "Paris Saint-Germain" ~ "Paris S-G",
+        team == "AS Momaco" ~ "Monaco",
+        team == "AS Roma" ~ "Roma",
         TRUE ~ team
     ))
 
 
-# matches <- read_csv("https://projects.fivethirtyeight.com/soccer-api/club/spi_matches_latest.csv") %>%
-#   filter(league == 'Barclays Premier League' | league == 'German Bundesliga' | league == 'Spanish Primera Division' |  league == 'French Ligue 1' | league == 'Italy Serie A',
-#            season == 2022)
 
-# Extra code to get unique teams
-# teams1 <- matches %>%
-#   distinct(team1)
-# 
-# teams2 <- matches %>%
-#   distinct(team2)
-# 
-# teams <- bind_rows(teams1, teams2) %>%
-#   select(team1) %>%
-#   rename(team = team1) %>%
-#   distinct(team) %>%
-#   drop_na
-# 
-# write_csv(teams, "big_5_team_mapping.csv")
+# --- PROD (GitHub) ---
+matches_raw <- read_csv(
+  "https://raw.githubusercontent.com/steodose/club-elo/main/matches_all_leagues.csv",
+  show_col_types = FALSE
+)
+matches <- clean_matches(matches_raw)
 
-
-## Load data V2 from football data
-
-# matches_eng <- read_csv("https://www.football-data.co.uk/mmz4281/2324/E0.csv")
-# matches_esp <- read_csv("https://www.football-data.co.uk/mmz4281/2324/SP1.csv")
-# matches_ger <- read_csv("https://www.football-data.co.uk/mmz4281/2324/D1.csv")
-# matches_fra <- read_csv("https://www.football-data.co.uk/mmz4281/2324/F1.csv")
-# matches_ita <- read_csv("https://www.football-data.co.uk/mmz4281/2324/I1.csv")
-
-## Load data V3 from worldfootballr
-# matches_eng <- worldfootballR::fb_match_results("ENG", "M", season_end_year = 2024)
-# matches_esp <- worldfootballR::fb_match_results("ESP", "M", season_end_year = 2024)
-# matches_ger <- worldfootballR::fb_match_results("GER", "M", season_end_year = 2024)
-# matches_fra <- worldfootballR::fb_match_results("FRA", "M", season_end_year = 2024)
-# matches_ita <- worldfootballR::fb_match_results("ITA", "M", season_end_year = 2024)
-# 
-# 
-# # join all leagues
-# matches <- bind_rows(matches_eng, matches_esp, matches_ger, matches_fra, matches_ita)
-# 
-# matches <- matches %>%
-#    mutate(Div = case_when(
-#         Div == "E0" ~ "EPL",
-#         Div == "SP1" ~ "La Liga",
-#         Div == "D1" ~ "Bundesliga",
-#         Div == "F1" ~ "Ligue 1",
-#         Div == "I1" ~ "Serie A",
-#         TRUE ~ Div
-#     ))
-
-
-# updated matches
-matches <- read_csv('https://raw.githubusercontent.com/steodose/club-elo/main/matches_all_leagues.csv')
+# --- LOCAL TEST (uncomment when needed) ---
+# matches_raw <- read_csv("matches_all_leagues.csv", show_col_types = FALSE)
+# matches <- clean_matches(matches_raw)
 
 # read in latest Elo ratings
 latest_ratings <- read_csv('https://raw.githubusercontent.com/steodose/club-elo/main/latest_ratings.csv')
@@ -255,9 +260,13 @@ Inputs {.sidebar}
 
 ``` {r}
 
- selectInput("leagueInput", label = h3("Select League"), 
-    choices = unique(matches$Competition_Name),
-    selected="EPL", multiple = FALSE)
+selectInput(
+  "leagueInput",
+  label = h3("Select League"),
+  choices = sort(unique(matches$Competition_Name)),
+  selected = "Premier League",
+  multiple = FALSE
+)
 
 ```
 
@@ -274,6 +283,20 @@ country_leagues <- data.frame(country = c("England", "Germany", "Spain", "France
                         league = c("Premier League", "Fußball-Bundesliga", "La Liga", "Ligue 1", "Serie A")
 )
 
+# add flag mappings
+country_leagues <- data.frame(
+  country = c("England", "Germany", "Spain", "France", "Italy"),
+  league  = c("Premier League", "Fußball-Bundesliga", "La Liga", "Ligue 1", "Serie A"),
+  flag_url = c(
+    "https://flagcdn.com/w40/gb-eng.png",  # England
+    "https://flagcdn.com/w40/de.png",
+    "https://flagcdn.com/w40/es.png",
+    "https://flagcdn.com/w40/fr.png",
+    "https://flagcdn.com/w40/it.png"
+  )
+)
+
+
 country <- reactive({
   country_leagues %>% 
   filter(league == input$leagueInput) %>% 
@@ -283,10 +306,21 @@ country <- reactive({
 
 # Put valueBox() inside renderValueBox({})
 renderValueBox({
-  valueBox(value = country(), 
-           caption = "Country",
-           color = "#013369",
-           icon = "fa-globe")
+
+  df <- country_leagues %>%
+    filter(league == input$leagueInput)
+
+  valueBox(
+    value = HTML(
+      paste0(
+        '<img src="', df$flag_url, '" height="24" style="margin-right:8px;">',
+        df$country
+      )
+    ),
+    caption = "Country",
+    color = "#013369",
+    icon = NULL
+  )
 })
 
 ```
@@ -297,19 +331,22 @@ renderValueBox({
 ```{r}
 
 update_date <- reactive({
-  matches %>% 
-  filter(Competition_Name == input$leagueInput) %>% 
-    select(-Notes, -Round) %>% #remove this field so the next line works properly
-    na.omit() %>%
-  summarise(latest_match = max(Date, na.rm = TRUE))
+  matches %>%
+    filter(Competition_Name == input$leagueInput) %>%
+    filter(!is.na(HomeGoals), !is.na(AwayGoals)) %>%   # only completed matches
+    summarise(latest_match = max(Date, na.rm = TRUE)) %>%
+    pull(latest_match)
 })
+
 
 # Put valueBox() inside renderValueBox({})
 renderValueBox({
-  valueBox(value = update_date(), 
-           caption = "Matches Last Updated",
-           color = "#013369",
-           icon = "fa-calendar")
+  valueBox(
+    value = format(update_date(), "%B %d, %Y"),
+    caption = "Matches Last Updated",
+    color = "#013369",
+    icon = "fa-calendar"
+  )
 })
 
 ```
@@ -434,8 +471,9 @@ league_matches() %>%
     cols_align(align = "left",
                columns = 1) %>%
     tab_options(column_labels.font.weight = "bold") %>%
-    tab_header(title = md("**2025-26 League Table**"),
-               subtitle = glue("Thru matches played as of date mentioned above.")) %>%
+    tab_header(
+  title = md(glue("**2025-26 {input$leagueInput} Table**")),
+  subtitle = glue("Thru matches played as of date mentioned above.")) %>%
     tab_source_note(
         source_note = md("DATA: FBREF.com")) %>%
     gt_plt_bar_pct(column = win_perc, scaled = TRUE, fill = "navy", background = "gray") %>%
@@ -465,77 +503,77 @@ league_matches() %>%
     }
 ```
 
-### All Team Ratings
+<!-- ### All Team Ratings -->
 
-**Big 5 European Team Ratings**
+<!-- **Big 5 European Team Ratings** -->
 
-2025-26 ratings coming soon...
+<!-- 2025-26 ratings coming soon... -->
 
-``` {r}
+<!-- ``` {r} -->
 
-# Reactable table setup
-latest_ratings_table <- reactive({
-  latest_ratings %>%
-  left_join(team_mapping_2024) %>%
-  select(url_logo_espn, team, league, country, rating) %>%
-  arrange(desc(rating)) %>%
-  mutate(rank = row_number()
-         ) %>%
-  select(rank, url_logo_espn, team,league, country, rating)
-    })
+<!-- # Reactable table setup -->
+<!-- latest_ratings_table <- reactive({ -->
+<!--   latest_ratings %>% -->
+<!--   left_join(team_mapping_2024) %>% -->
+<!--   select(url_logo_espn, team, league, country, rating) %>% -->
+<!--   arrange(desc(rating)) %>% -->
+<!--   mutate(rank = row_number() -->
+<!--          ) %>% -->
+<!--   select(rank, url_logo_espn, team,league, country, rating) -->
+<!--     }) -->
 
 
-# render reactable table
-renderReactable({
-reactable(latest_ratings_table(),
-          #theme = theme_538,
-                  showSortIcon = TRUE,
-                  searchable = TRUE,
-                  language = reactableLang(
-                      searchPlaceholder = "SEARCH FOR A TEAM..."),
-                  defaultPageSize = 100,
-                  columns = list(
-                    rank = colDef(name = "Rank",
-                                       align = "center"),
-                      team = colDef(name = "Team",
-                                    minWidth = 140,
-                                    align = "left"),
-                    league = colDef(name = "League",
-                                    minWidth = 140,
-                                    align = "left"),
-                    country = colDef(name = "Country",
-                                    minWidth = 140,
-                                    align = "left"),
-                    rating = colDef(name = "Rating",
-                                      align = "right",
-                                      style = color_scales(latest_ratings, colors = paletteer::paletteer_d(
-                                         palette = "ggsci::amber_material"
-                                     )
-                                     ),
-                                      format =  colFormat(digits = 1)),
-                      
-                      ### add logos using embed_img()
-                      url_logo_espn = colDef(
-                          name = "",
-                          maxWidth = 70,
-                          align = "center",
-                          cell = embed_img(height = "25", width = "28")
-                      )
-                      ),
-                  pagination = FALSE,
-                  compact = TRUE, 
-                  borderless = FALSE, 
-                  striped = FALSE,
-                  fullWidth = FALSE, 
-                  defaultColDef = colDef(align = "center", minWidth = 95)
-          )
-})
+<!-- # render reactable table -->
+<!-- renderReactable({ -->
+<!-- reactable(latest_ratings_table(), -->
+<!--           #theme = theme_538, -->
+<!--                   showSortIcon = TRUE, -->
+<!--                   searchable = TRUE, -->
+<!--                   language = reactableLang( -->
+<!--                       searchPlaceholder = "SEARCH FOR A TEAM..."), -->
+<!--                   defaultPageSize = 100, -->
+<!--                   columns = list( -->
+<!--                     rank = colDef(name = "Rank", -->
+<!--                                        align = "center"), -->
+<!--                       team = colDef(name = "Team", -->
+<!--                                     minWidth = 140, -->
+<!--                                     align = "left"), -->
+<!--                     league = colDef(name = "League", -->
+<!--                                     minWidth = 140, -->
+<!--                                     align = "left"), -->
+<!--                     country = colDef(name = "Country", -->
+<!--                                     minWidth = 140, -->
+<!--                                     align = "left"), -->
+<!--                     rating = colDef(name = "Rating", -->
+<!--                                       align = "right", -->
+<!--                                       style = color_scales(latest_ratings, colors = paletteer::paletteer_d( -->
+<!--                                          palette = "ggsci::amber_material" -->
+<!--                                      ) -->
+<!--                                      ), -->
+<!--                                       format =  colFormat(digits = 1)), -->
 
-```
+<!--                       ### add logos using embed_img() -->
+<!--                       url_logo_espn = colDef( -->
+<!--                           name = "", -->
+<!--                           maxWidth = 70, -->
+<!--                           align = "center", -->
+<!--                           cell = embed_img(height = "25", width = "28") -->
+<!--                       ) -->
+<!--                       ), -->
+<!--                   pagination = FALSE, -->
+<!--                   compact = TRUE,  -->
+<!--                   borderless = FALSE,  -->
+<!--                   striped = FALSE, -->
+<!--                   fullWidth = FALSE,  -->
+<!--                   defaultColDef = colDef(align = "center", minWidth = 95) -->
+<!--           ) -->
+<!-- }) -->
+
+<!-- ``` -->
 
 ### Forecasts
 
-2025-25 forecasts coming soon...
+2025-26 forecasts coming soon...
 
 ```{r}
 
