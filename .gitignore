@@ -1,0 +1,13 @@
+# Mac
+.DS_Store
+
+# Logs
+*.log
+
+# RStudio user state
+.Rproj.user/
+.Rhistory
+.RData
+
+# Shiny deployment artifacts
+rsconnect/shinyapps.io/

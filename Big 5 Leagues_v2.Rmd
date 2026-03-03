@@ -251,7 +251,11 @@ matches <- clean_matches(matches_raw)
 latest_ratings <- read_csv('https://raw.githubusercontent.com/steodose/club-elo/main/latest_ratings.csv')
 
 # read in latest simulations
-simulations <- read_csv('https://raw.githubusercontent.com/steodose/club-elo/refs/heads/main/simulations.csv')
+# sim_rank_dist <- read_csv('https://raw.githubusercontent.com/steodose/club-elo/main/simulations_rank_dist.csv', show_col_types = FALSE)
+# sim_summary   <- read_csv('https://raw.githubusercontent.com/steodose/club-elo/main/simulations_summary.csv', show_col_types = FALSE)
+
+sim_rank_dist <- read_csv("simulations_rank_dist.csv")
+sim_summary   <- read_csv("simulations_summary.csv")
 
 ```
 
@@ -573,107 +577,113 @@ league_matches() %>%
 
 ### Forecasts
 
-2025-26 forecasts coming soon...
+2025-26 forecasts for all leagues coming soon...
 
 ```{r}
 
-## Probabilities by position table
-iSim <- 10000
+# 1) Build the league-specific sims table reactively
+forecast_table <- reactive({
 
-league_table <- table(simulations$Team, simulations$Rank)/iSim
+  sim_league <- sim_rank_dist %>%
+    filter(Competition_Name == input$leagueInput) %>%
+    mutate(Placement = as.character(Rank)) %>%
+    select(Team, Placement, Freq = prob)
 
-league_table2 <- as.data.frame(league_table) %>% # Convert table to data frame
-    rename(Team = Var1, Placement = Var2) %>% 
-    arrange(Placement, desc(Freq))
+  validate(
+    need(nrow(sim_league) > 0, "No simulations found for this league yet.")
+  )
 
-league_table2$Freq <- round(league_table2$Freq, 2)
+  # Wide table: Team + rank probability columns ("1","2",...)
+  league_table3 <- sim_league %>%
+      pivot_wider(names_from  = Placement,
+                  values_from = Freq,
+                  values_fill = 0
+                  )
 
-league_table3 <- league_table2 %>% 
-    pivot_wider(names_from = Placement,
-                values_from = Freq)
+rank_cols <- setdiff(names(league_table3), "Team")
+rank_cols_num <- suppressWarnings(as.integer(rank_cols))
+rank_cols <- rank_cols[order(rank_cols_num)]
 
+league_table3 <- league_table3 %>%
+  mutate(across(all_of(rank_cols), ~ as.numeric(.x)))
 
-## create color palette to be used in bar plot based on input data
-chicklets_pal <- c(
-    "gray85",
-    rep("gray70", length(league_table2$Freq) - 19), 
-    "#ff0078"
-)
+  # Identify rank columns from the wide table (everything except Team)
+  rank_cols <- setdiff(names(league_table3), "Team")
+  rank_cols_num <- suppressWarnings(as.integer(rank_cols))
+  rank_cols <- rank_cols[order(rank_cols_num)]
 
-# prep for gt heatmap
+  validate(
+    need(length(rank_cols) > 0, "No rank probability columns found (expected ranks like '1','2',...).")
+  )
 
-league_table3 <- league_table3 %>% 
-    mutate(Rank = row_number()) %>% 
-    relocate(Rank)
+  # FORCE rank columns numeric (fixes rescale() on character)
+  league_table3 <- league_table3 %>%
+    mutate(across(all_of(rank_cols), ~ as.numeric(.x)))
 
-league_table_gt <- left_join(league_table3, team_mapping_2024, by = c("Team" = "team"))
-
-league_table_gt2 <- league_table_gt %>% 
-    mutate(Rank = row_number()) %>% 
-    relocate(Rank) %>% 
-    select(Rank, url_logo_espn, 2:22) %>% 
+  # Add logos AFTER numeric coercion
+  league_table_gt <- league_table3 %>%
+    left_join(team_mapping_2024, by = c("Team" = "team")) %>%
+    select(url_logo_espn, Team, all_of(rank_cols)) %>%
     rename(logo = url_logo_espn)
 
-# put in rank order
-league_table_gt3 <- league_table_gt2[
-    with(league_table_gt2, order(-`1`, -`2`, -`3`, -`4`, -`5`, -`6`, -`7`, -`8`, -`9`, -`10`,-`11`, -`12`, -`13`, -`14`, -`15`, -`16`, -`17`, -`18`, -`19`, -`20`)),] %>% 
-    mutate(Rank = row_number())
-
-
-# make gt table
-render_gt({
-  league_table_gt3 %>% 
-    gt() %>% 
-    cols_label(Rank = "",
-               logo = "",
-               Team = "") %>% 
-    tab_header(
-        title = md("**Premier League Simulations**"), 
-        subtitle = paste0("2025-26 Season | Updated ", format(Sys.Date(), format="%B %d, %Y"))
-    )  %>% 
-    text_transform(
-        locations = cells_body(vars(logo)),
-        fn = function(x) {
-            web_image(url = x, 
-                      height = px(30)) 
-        }
+  # Order by title odds, then runner-up odds (or next best)
+  league_table_gt3 <- league_table_gt %>%
+    arrange(
+      desc(.data[[rank_cols[1]]]),
+      desc(.data[[rank_cols[min(2, length(rank_cols))]]])
     ) %>%
-    fmt_percent(
-        columns = vars(`1`:`20`),
-        decimals = 1
-    )  %>%
-    data_color(
-        columns = vars(`1`:`20`),
-        colors = scales::col_numeric(
-            palette = paletteer::paletteer_d(
-                palette = "ggsci::amber_material",
-                direction  = 1
-            ) %>% as.character(),
-            domain = c(0, 1), 
-            na.color = "#00441BFF"
-        )
-    ) %>%
-    tab_options(
-        column_labels.background.color = "white",
-        table.border.top.width = px(3),
-        table.border.top.color = "white",
-        table.border.bottom.color = "white",
-        table.border.bottom.width = px(3),
-        column_labels.border.top.width = px(3),
-        column_labels.border.top.color = "white",
-        column_labels.border.bottom.width = px(3),
-        column_labels.border.bottom.color = "black",
-        data_row.padding = px(3),
-        source_notes.font.size = 12,
-        table.font.size = 16,
-        heading.align = "left"
-    )  %>%
-    tab_source_note(
-        source_note = md("Table: @steodosescu | Data: football-data.co.uk")
-    )
+    mutate(Rank = row_number()) %>%
+    relocate(Rank)
 
+  list(
+    data = league_table_gt3,
+    rank_cols = rank_cols
+  )
 })
 
+# 2) Render GT table (reactive consumer)
+render_gt({
+  obj <- forecast_table()
+  league_table_gt3 <- obj$data
+  rank_cols <- obj$rank_cols
+
+  league_table_gt3 %>%
+    gt() %>%
+    cols_label(Rank = "", logo = "", Team = "") %>%
+    tab_header(
+      title = md(glue("**{input$leagueInput} Simulations**")),
+      subtitle = paste0("2025-26 Season | Updated ", format(Sys.Date(), format = "%B %d, %Y"))
+    ) %>%
+    text_transform(
+      locations = cells_body(vars(logo)),
+      fn = function(x) web_image(url = x, height = px(30))
+    ) %>%
+    fmt_percent(columns = all_of(rank_cols), decimals = 1) %>%
+    data_color(
+      columns = all_of(rank_cols),
+      colors = scales::col_numeric(
+        palette = c("white", "#ffbf00", "#ff7a00", "#b30000"),
+        domain = c(0, 1),
+        na.color = "white"
+      )
+    ) %>%
+    tab_options(
+      column_labels.background.color = "white",
+      table.border.top.width = px(3),
+      table.border.top.color = "white",
+      table.border.bottom.color = "white",
+      table.border.bottom.width = px(3),
+      column_labels.border.top.width = px(3),
+      column_labels.border.top.color = "white",
+      column_labels.border.bottom.width = px(3),
+      column_labels.border.bottom.color = "black",
+      data_row.padding = px(3),
+      source_notes.font.size = 12,
+      table.font.size = 16,
+      heading.align = "left"
+    ) %>%
+    tab_source_note(source_note = md("Table: @steodosescu | Data: football-data.co.uk"))
+})
 
 
 ```
