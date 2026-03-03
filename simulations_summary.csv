@@ -1,0 +1,97 @@
+Competition_Name,Team,exp_pts,exp_gd,p_title,p_ucl,p_uel,p_releg
+Fußball-Bundesliga,Augsburg,40.92,-17.53,0,0,6e-4,0.0219
+Fußball-Bundesliga,Bayern Munich,89.95,95.8,0.9999,1,0,1
+Fußball-Bundesliga,Dortmund,72.73,37.31,1e-4,0.994,0.006,0.0265
+Fußball-Bundesliga,Ein Frankfurt,49.46,1.46,0,0.0012,0.0648,0.0039
+Fußball-Bundesliga,FC Koln,36.37,-11.98,0,0,0,0.075
+Fußball-Bundesliga,Freiburg,46.06,-6.99,0,0,0.0114,0.0058
+Fußball-Bundesliga,Hamburg,37.86,-13.28,0,0,0,0.0411
+Fußball-Bundesliga,Heidenheim,20.77,-45.91,0,0,0,0.9971
+Fußball-Bundesliga,Hoffenheim,65.65,27.86,0,0.8381,0.1609,0.1619
+Fußball-Bundesliga,Leverkusen,58.93,20.94,0,0.2263,0.7274,0.0051
+Fußball-Bundesliga,M'gladbach,35.85,-18.24,0,0,0,0.106
+Fußball-Bundesliga,Mainz,34.21,-16.87,0,0,0,0.2001
+Fußball-Bundesliga,RB Leipzig,61.71,19.1,0,0.4518,0.5302,0.018
+Fußball-Bundesliga,St Pauli,33.55,-22.8,0,0,0,0.2761
+Fußball-Bundesliga,Stuttgart,62.06,18.81,0,0.4886,0.4982,0.2183
+Fußball-Bundesliga,Union Berlin,41.43,-11.17,0,0,5e-4,0.0185
+Fußball-Bundesliga,Werder Bremen,31.01,-27.05,0,0,0,0.5785
+Fußball-Bundesliga,Wolfsburg,29.65,-29.46,0,0,0,0.7153
+La Liga,Alaves,39.55,-17.02,0,0,1e-4,0.2828
+La Liga,Ath Bilbao,48.22,-11.37,0,0,0.0224,0.0159
+La Liga,Ath Madrid,72.72,27.71,0,0.9481,0.0519,0.6219
+La Liga,Barcelona,91.25,64.29,0.8652,1,0,0.1348
+La Liga,Betis,62.66,14.5,0,0.0625,0.8723,0.0036
+La Liga,Celta,58.23,10.29,0,0.0114,0.7242,4e-4
+La Liga,Elche,41.08,-8.01,0,0,5e-4,0.1502
+La Liga,Espanol,51.27,-9.12,0,2e-4,0.0759,0.0051
+La Liga,Getafe,45.72,-11.54,0,0,0.0049,0.0186
+La Liga,Girona,41.98,-22.54,0,0,6e-4,0.1433
+La Liga,Levante,34.4,-21.59,0,0,0,0.7647
+La Liga,Mallorca,38.38,-16.24,0,0,1e-4,0.3954
+La Liga,Osasuna,50.31,1.25,0,1e-4,0.0685,0.0037
+La Liga,Oviedo,26.82,-36.14,0,0,0,0.993
+La Liga,Real Madrid,85.44,46.95,0.1346,1,0,0.8654
+La Liga,Sevilla,43.86,-12.61,0,0,0.0023,0.0462
+La Liga,Sociedad,52.65,1.31,0,6e-4,0.1498,0.001
+La Liga,Valencia,42.39,-16.82,0,0,0.0017,0.121
+La Liga,Vallecano,43.37,-11.62,0,0,0.002,0.078
+La Liga,Villarreal,74.69,28.33,2e-4,0.9771,0.0228,0.0229
+Ligue 1,Angers,39.93,-11.8,0,0,6e-4,0.052
+Ligue 1,Auxerre,27.4,-22.66,0,0,0,0.846
+Ligue 1,Brest,46.26,-3.34,0,2e-4,0.0319,0.0326
+Ligue 1,Le Havre,37.16,-13.24,0,0,2e-4,0.1791
+Ligue 1,Lens,73.11,34.61,0.0927,0.9999,1e-4,0.0497
+Ligue 1,Lille,55.38,8.28,0,0.113,0.531,0.0494
+Ligue 1,Lorient,44.58,-8.2,0,2e-4,0.0094,0.0739
+Ligue 1,Lyon,62.37,18.47,1e-4,0.822,0.1603,0.0177
+Ligue 1,Marseille,63.23,29.7,0,0.8794,0.1112,0.0094
+Ligue 1,Metz,20.16,-44.16,0,0,0,0.9974
+Ligue 1,Monaco,50.79,3.51,0,0.0158,0.1902,0.0087
+Ligue 1,Nantes,25.47,-28.33,0,0,0,0.945
+Ligue 1,Nice,34.02,-21.07,0,0,0,0.136
+Ligue 1,Paris FC,36.19,-18.15,0,0,0,0.0446
+Ligue 1,Paris SG,79.88,49.53,0.9072,1,0,1
+Ligue 1,Rennes,55.62,5.86,0,0.1183,0.539,0.0135
+Ligue 1,Strasbourg,53.06,15.68,0,0.0507,0.4058,0.0157
+Ligue 1,Toulouse,45.14,5.32,0,5e-4,0.0203,0.0413
+Premier League,Arsenal,83.98,48.52,0.7945,1,0,1
+Premier League,Aston Villa,66.77,11,0,0.6466,0.3066,4e-4
+Premier League,Bournemouth,51.98,-3.78,0,5e-4,0.0234,0.0459
+Premier League,Brentford,58.2,5.95,0,0.0404,0.2786,0.0088
+Premier League,Brighton,51.58,4.3,0,0.001,0.025,0.0124
+Premier League,Burnley,27.81,-33.06,0,0,0,0.9691
+Premier League,Chelsea,61.57,20.3,0,0.2059,0.5251,0.0011
+Premier League,Crystal Palace,46.85,-6.74,0,0,7e-4,0.124
+Premier League,Everton,52.62,-2.42,0,0.0014,0.0354,0.0272
+Premier League,Fulham,54.46,-1.24,0,0.0042,0.0719,0.0301
+Premier League,Leeds,44.2,-11.13,0,0,0,0.0784
+Premier League,Liverpool,64.09,13.51,0,0.3935,0.4655,0.001
+Premier League,Man City,79.74,43.13,0.2055,0.9999,1e-4,0.0023
+Premier League,Man United,67.36,16.02,0,0.7064,0.2556,0.0081
+Premier League,Newcastle,49.07,-3.34,0,1e-4,0.0052,0.0428
+Premier League,Nott'm Forest,36.55,-21.45,0,0,0,0.3051
+Premier League,Sunderland,49.86,-5.96,0,1e-4,0.0067,0.1159
+Premier League,Tottenham,42.45,-5.65,0,0,2e-4,0.1346
+Premier League,West Ham,34.14,-28.16,0,0,0,0.6877
+Premier League,Wolves,19.52,-39.78,0,0,0,0.9999
+Serie A,Atalanta,63.23,17.59,0,0.0313,0.2203,0.0134
+Serie A,Bologna,54.51,4.44,0,0,0.0036,0.0124
+Serie A,Cagliari,42.29,-11.64,0,0,0,0.0442
+Serie A,Como,70.41,34.78,0,0.4744,0.4722,0.0534
+Serie A,Cremonese,35.59,-21.62,0,0,0,0.2766
+Serie A,Fiorentina,36.36,-16.92,0,0,0,0.1876
+Serie A,Genoa,40.11,-10.14,0,0,0,0.0405
+Serie A,Inter,91.61,59.69,0.9926,1,0,1
+Serie A,Juventus,69,29.05,0,0.309,0.5631,0.1279
+Serie A,Lazio,48.13,-2.08,0,0,0,0.0163
+Serie A,Lecce,34.05,-24.81,0,0,0,0.4649
+Serie A,Milan,78.42,32.45,0.0068,0.9598,0.0391,0.0402
+Serie A,Napoli,73.21,20.58,4e-4,0.6828,0.294,0.1421
+Serie A,Parma,44.11,-17.51,0,0,0,0.0571
+Serie A,Pisa,24.08,-33.14,0,0,0,0.9901
+Serie A,Roma,71.51,25.62,2e-4,0.5426,0.4052,0.2293
+Serie A,Sassuolo,52.84,-2.53,0,1e-4,0.0024,0.0062
+Serie A,Torino,40.44,-28.46,0,0,0,0.1235
+Serie A,Udinese,47.32,-12.34,0,0,1e-4,0.0108
+Serie A,Verona,21.68,-43.02,0,0,0,0.9982
